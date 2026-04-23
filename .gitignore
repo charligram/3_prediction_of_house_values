@@ -1,0 +1,17 @@
+# No subir entorno virtual
+venv/
+
+# No divulgar la información
+data/
+
+# Carpetas internas de jupyter
+.ipynb_checkpoints/
+
+# Conf de vs code
+.vscode/
+.idea
+
+# Caché
+__pycache__/
+*.py[cod]
+*$py.class
