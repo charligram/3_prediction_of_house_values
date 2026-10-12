@@ -34,6 +34,8 @@ def hist_plot_project(x: pd.Series, title: str, x_label: str, y_label: str = 'Co
         linewidth=2
     )
 
+    ax.grid(axis='y', color=PROJECT_COLORS[1], linestyle='--', alpha=0.7)
+
     ax.set_title(title)
     ax.set_xlabel(x_label)
 
