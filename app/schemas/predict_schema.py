@@ -3,7 +3,7 @@ from pydantic import BaseModel, Field
 
 # Detalle: Se añade alias a algunos atributos debido a que el atributo original empieza por un número
 class PredictionInput(BaseModel):
-    MSSubClass: int
+    MSSubClass: str
     MSZoning: str
     LotFrontage: float
     LotArea: int
