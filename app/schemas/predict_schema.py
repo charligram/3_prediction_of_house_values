@@ -8,7 +8,7 @@ class PredictionInput(BaseModel):
     LotFrontage: float
     LotArea: int
     Street: str
-    Alley: str
+    Alley: str | None
     LotShape: str
     LandContour: str
     Utilities: str
@@ -27,7 +27,7 @@ class PredictionInput(BaseModel):
     RoofMatl: str
     Exterior1st: str
     Exterior2nd: str
-    MasVnrType: str
+    MasVnrType: str | None
     MasVnrArea: float
     ExterQual: str
     ExterCond: str
@@ -59,7 +59,7 @@ class PredictionInput(BaseModel):
     TotRmsAbvGrd: int
     Functional: str
     Fireplaces: int
-    FireplaceQu: str
+    FireplaceQu: str | None
     GarageType: str
     GarageYrBlt: float
     GarageFinish: str
@@ -74,7 +74,7 @@ class PredictionInput(BaseModel):
     three_season_porch_area: int = Field(alias='3SsnPorch')
     ScreenPorch: int
     PoolArea: int
-    PoolQC: str
+    PoolQC: str | None
     Fence: str
     MiscFeature: str
     MiscVal: int

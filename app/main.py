@@ -1,6 +1,10 @@
 from fastapi import FastAPI
 from app.schemas.predict_schema import PredictionInput
 import pandas as pd
+from app.services.predict import preprocess, model_predict
+import joblib
+
+xgboost_model = joblib.load('model/xgboost_model.pkl')
 
 app = FastAPI()
 
@@ -19,4 +23,14 @@ def predict(data: PredictionInput):
     # Convertir a un DataFrame
     df = pd.DataFrame([data_dict])
 
-    print(df)
+    # Preprocesar info
+    df = preprocess(df)
+
+    # Realizar predicción
+    prediction = model_predict(xgboost_model, df)
+    prediction = float(prediction[0])
+
+
+    return {"prediction": prediction}
+
+    
