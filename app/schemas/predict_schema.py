@@ -28,7 +28,7 @@ class PredictionInput(BaseModel):
     Exterior1st: str
     Exterior2nd: str
     MasVnrType: str | None
-    MasVnrArea: float
+    MasVnrArea: float | None
     ExterQual: str
     ExterCond: str
     Foundation: str
