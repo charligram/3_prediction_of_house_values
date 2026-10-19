@@ -1,4 +1,6 @@
 import streamlit as st
+import requests
+import json
 
 st.title('House Prices Predictor')
 
@@ -10,6 +12,8 @@ st.subheader('Caracteristicas de la vivienda')
 
 
 options_mssubclass = range(20, 191, 10)
+options_mssubclass = list(options_mssubclass)
+options_mssubclass = [str(number) for number in options_mssubclass]
 ms_sub_class = st.selectbox(
     'Tipo de vivienda',
     options=options_mssubclass
@@ -376,7 +380,7 @@ if have_basement:
     )
 else:
     bsmt_full_bath = 0
-    bstm_half_bath = 0
+    bsmt_half_bath = 0
 
 
 full_bath = st.number_input(
@@ -474,6 +478,11 @@ if has_garage:
         max_value=5,
         step=1
     )
+    garage_area = st.number_input(
+        'Area del garage, en pies cuadrados',
+        min_value=1,
+        step=10
+    )
     garage_qual = st.selectbox(
         'Calidad del garage',
         options=['Ex', 'Gd', 'TA', 'Fa', 'Po']
@@ -487,6 +496,7 @@ else:
     garage_yr_blt = 0
     garage_finish = 'NoGarage'
     garage_cars = 0
+    garage_area = 0
     garage_qual ='NoGarage'
     garage_cond ='NoGarage'
 
@@ -552,7 +562,7 @@ if has_pool:
         options=['Ex', 'Gd', 'TA', 'Fa']
     )
 else:
-    pool_area = 0,
+    pool_area = 0
     pool_qc = 'NoPool'
 
 
@@ -563,7 +573,7 @@ fence = st.selectbox(
 
 
 has_misc_feature = st.checkbox(
-    'La vivienda contiene alguna otra característica o funcionalida no mencionada en otras categorías?'
+    'La vivienda contiene alguna otra característica o funcionalidad no mencionada en otras categorías?'
 )
 if has_misc_feature:
     misc_feature = st.selectbox(
@@ -613,9 +623,103 @@ sale_condition = st.selectbox(
 
 
 
-if st.button('Mostrar datos'):
+
+if st.button('Mostrar datos y predecir'):
     st.write('Caracteristicas seleccionadas: ')
 
-    json_to_send = st.json({
-        
-    })
+    json_to_send = {
+        'MSSubClass': ms_sub_class,
+        'MSZoning': ms_zoning,
+        'LotFrontage': lot_frontage,
+        'LotArea': lot_area,
+        'Street': street,
+        'Alley': alley,
+        'LotShape': lot_shape,
+        'LandContour': land_contour,
+        'Utilities': utilities,
+        'LotConfig': lot_config,
+        'LandSlope': land_slope,
+        'Neighborhood': neighborhood,
+        'Condition1': condition1,
+        'Condition2': condition2,
+        'BldgType': bldg_type,
+        'HouseStyle': house_style,
+        'OverallQual': overall_qual,
+        'OverallCond': overall_cond,
+        'YearBuilt': year_built,
+        'YearRemodAdd': year_remod_add,
+        'RoofStyle': roof_style,
+        'RoofMatl': roof_mat,
+        'Exterior1st': exterior1st,
+        'Exterior2nd': exterior2nd,
+        'MasVnrType': mas_vnr_type,
+        'MasVnrArea': mas_vnr_area,
+        'ExterQual': exter_qual,
+        'ExterCond': exter_cond,
+        'Foundation': foundation,
+        'BsmtQual': bsmt_qual,
+        'BsmtCond': bsmt_cond,
+        'BsmtExposure': bsmt_exposure,
+        'BsmtFinType1': bsmt_fin_type1,
+        'BsmtFinSF1': bsmt_fin_sf1,
+        'BsmtFinType2': bsmt_fin_type2,
+        'BsmtFinSF2': bsmt_fin_sf2,
+        'BsmtUnfSF': bsmt_unf_sf,
+        'TotalBsmtSF': total_bsmt_sf,
+        'Heating': heating,
+        'HeatingQC': heating_qc,
+        'CentralAir': central_air,
+        'Electrical': electrical,
+        '1stFlrSF': first_floor_sf,
+        '2ndFlrSF': second_floor_sf,
+        'LowQualFinSF': low_qual_fin_sf,
+        'GrLivArea': gr_liv_area,
+        'BsmtFullBath': bsmt_full_bath,
+        'BsmtHalfBath': bsmt_half_bath,
+        'FullBath': full_bath,
+        'HalfBath': half_bath,
+        'BedroomAbvGr': bedroom_abv_gr,
+        'KitchenAbvGr': kitchen_abv_gr,
+        'KitchenQual': kitchen_qual,
+        'TotRmsAbvGrd': tot_rms_abv_grd,
+        'Functional': functional,
+        'Fireplaces': fireplaces,
+        'FireplaceQu': fireplace_qu,
+        'GarageType': garage_type,
+        'GarageYrBlt': garage_yr_blt,
+        'GarageFinish': garage_finish,
+        'GarageCars': garage_cars,
+        'GarageArea': garage_area,
+        'GarageQual': garage_qual,
+        'GarageCond': garage_cond,
+        'PavedDrive': paved_drive,
+        'WoodDeckSF': wood_deck,
+        'OpenPorchSF': open_porch,
+        'EnclosedPorch': enclosed_porch,
+        '3SsnPorch': three_season_porch_area,
+        'ScreenPorch': screen_porch,
+        'PoolArea': pool_area,
+        'PoolQC': pool_qc,
+        'Fence': fence,
+        'MiscFeature': misc_feature,
+        'MiscVal': misc_val,
+        'MoSold': mo_sold,
+        'YrSold': yr_sold,
+        'SaleType': sale_type,
+        'SaleCondition': sale_condition
+    }
+
+
+
+    response = requests.post(
+        'http://127.0.0.1:8000/predict',
+        json=json_to_send,
+        timeout=30
+    )
+
+    response = response.json()
+
+
+    st.json(response)
+
+    
