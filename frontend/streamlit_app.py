@@ -369,7 +369,7 @@ if have_basement:
         step=1
     )
     bsmt_half_bath = st.number_input(
-        'Baños sin terminar en el sótano'
+        'Baños sin terminar en el sótano',
         min_value=0,
         value=0,
         step=1
@@ -395,10 +395,93 @@ half_bath = st.number_input(
 )
 
 
-bedroom_abv_gr
+bedroom_abv_gr = st.slider(
+    'Dormitorios por sobre el nivel del suelo',
+    min_value=0,
+    max_value=10,
+    value=1,
+    step=1
+)
 
 
+kitchen_abv_gr = st.slider(
+    'Cocinas por sobre el nivel del suelo',
+    min_value=0,
+    max_value=5,
+    value=1,
+    step=1
+)
 
+
+kitchen_qual = st.selectbox(
+    'Calidad de la cocina',
+    options=['Ex', 'Gd', 'TA', 'Fa', 'Po']
+)
+
+
+tot_rms_abv_grd = st.slider(
+    'Total de habitaciones por sobre el nivel del suelo',
+    min_value=0,
+    max_value=20,
+    value=1,
+    step=1
+)
+
+
+functional = st.selectbox(
+    'Funcionalidad de la vivienda',
+    options=['Typ', 'Min1', 'Min2', 'Mod', 'Maj1', 'Maj2', 'Sev', 'Sal']
+)
+
+
+fireplaces = st.slider(
+    'Número de chimeneas',
+    min_value=0,
+    max_value=3,
+    value=0,
+    step=1
+)
+
+
+fireplace_qu = st.selectbox(
+    'Calidad de la chimenea',
+    options=['Ex', 'Gd', 'TA', 'Fa', 'Po', None]
+)
+
+
+has_garage = st.checkbox(
+    'La vivienda contiene garage?'
+)
+if has_garage:
+    garage_type = st.selectbox(
+        'Tipo de garage',
+        options=['2Types', 'Attchd', 'Basment', 'BuiltIn', 'CarPort', 'Detchd']
+    )
+    garage_yr_blt = st.number_input(
+        'Año de construcción del garage',
+        min_value=1800,
+        max_value=2026,
+        value=2000,
+        step=1
+    )
+    garage_finish = st.selectbox(
+        'Acabado interior del garage',
+        options=['Fin', 'RFn', 'Unf']
+    )
+    garage_cars = st.slider(
+        'Capacidad del garage en autos',
+        min_value=1,
+        max_value=5,
+        step=1
+    )
+    garage_qual = st.selectbox(
+        'Calidad del garage',
+        options=['Ex', 'Gd', 'TA', 'Fa', 'Po']
+    )
+    garage_cond = st.selectbox(
+        'Condiciones del garage',
+        options=['Ex', 'Gd', 'TA', 'Fa', 'Po']
+    )
 
 
 living_area = st.number_input(
