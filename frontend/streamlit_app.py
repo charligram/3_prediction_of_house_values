@@ -482,14 +482,133 @@ if has_garage:
         'Condiciones del garage',
         options=['Ex', 'Gd', 'TA', 'Fa', 'Po']
     )
+else:
+    garage_type = 'NoGarage'
+    garage_yr_blt = 0
+    garage_finish = 'NoGarage'
+    garage_cars = 0
+    garage_qual ='NoGarage'
+    garage_cond ='NoGarage'
 
 
-living_area = st.number_input(
-    'Superficie habitable (pies cuadrados)',
-    min_value=0,
-    value=1500,
-    step=100
+paved_drive = st.selectbox(
+    'Camino de acceso pavimentado',
+    options=['Y', 'P', 'N']
 )
+
+
+wood_deck = st.number_input(
+    'Area de la plataforma de madera, en pies cuadrados',
+    min_value=0,
+    value=50,
+    step=10
+)
+
+
+open_porch = st.number_input(
+    'Superficie del porche abierto, en pies cuadrados',
+    min_value=0,
+    value=25,
+    step=10
+)
+
+
+enclosed_porch = st.number_input(
+    'Superficie del porche cerrado, en pies cuadrados',
+    min_value=0,
+    value=25,
+    step=10
+)
+
+
+three_season_porch_area = st.number_input(
+    'Superficio del porche para 3 estaciones, en pies cuadrados',
+    min_value=0,
+    value=0,
+    step=10
+)
+
+
+screen_porch = st.number_input(
+    'Superficie del porche con mosquiteras, en pies cuadrados',
+    min_value=0,
+    value=0,
+    step=10
+)
+
+
+has_pool = st.checkbox(
+    'La vivienda tiene piscina?'
+)
+if has_pool:
+    pool_area = st.number_input(
+        'Area de la piscina, en pies cuadrados',
+        min_value=0,
+        value=0,
+        step=10
+    )
+    pool_qc = st.selectbox(
+        'Calidad de la piscina',
+        options=['Ex', 'Gd', 'TA', 'Fa']
+    )
+else:
+    pool_area = 0,
+    pool_qc = 'NoPool'
+
+
+fence = st.selectbox(
+    'Calidad de la cerca',
+    options=['GdPrv', 'MnPrv', 'GdWo', 'MnWW', 'NoFence']
+)
+
+
+has_misc_feature = st.checkbox(
+    'La vivienda contiene alguna otra característica o funcionalida no mencionada en otras categorías?'
+)
+if has_misc_feature:
+    misc_feature = st.selectbox(
+        'Característica/funcionalidad no contemplada en otras categorias',
+        options=['Shed', 'Gar2', 'Othr', 'TenC']
+    )
+    misc_val = st.number_input(
+        'Valor de la funcionalidad diversa',
+        min_value=1,
+        value=100,
+        step=100
+    )
+else:
+    misc_feature = 'NoMisceFeat'
+    misc_val = 0
+
+
+mo_sold = st.slider(
+    'Mes de venta',
+    min_value=1,
+    max_value=12,
+    value=1,
+    step=1
+)
+
+
+yr_sold = st.number_input(
+    'Año de venta',
+    min_value=1800,
+    value=2000,
+    step=1
+)
+
+
+sale_type = st.selectbox(
+    'Tipo de venta',
+    options=['WD', 'CWD', 'VWD', 'New', 'COD', 'Con', 'ConLw', 'ConLI', 'ConLD', 'Oth']
+)
+
+
+sale_condition = st.selectbox(
+    'Condición de venta',
+    options=['Normal', 'Abnormal', 'AjdLand', 'Alloca', 'Family', 'Partial']
+)
+
 
 
 
@@ -497,6 +616,6 @@ living_area = st.number_input(
 if st.button('Mostrar datos'):
     st.write('Caracteristicas seleccionadas: ')
 
-    st.json({
+    json_to_send = st.json({
         
     })
