@@ -1,0 +1,23 @@
+name: house-prices
+
+services:
+
+  fastapi:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    container_name: house-prices-fast-api-container
+    ports:
+      - "8000:8000"
+  
+  streamlit:
+    build:
+      context: .
+      dockerfile: Dockerfile.streamlit
+    container_name: house-prices-streamlit-container
+    environment:
+      API_URL: "http://fastapi:8000/predict"
+    ports:
+      - "8501:8501"
+    depends_on:
+      - fastapi
