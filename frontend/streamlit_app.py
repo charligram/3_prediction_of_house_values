@@ -532,7 +532,7 @@ enclosed_porch = st.number_input(
 
 
 three_season_porch_area = st.number_input(
-    'Superficio del porche para 3 estaciones, en pies cuadrados',
+    'Superficie del porche para 3 estaciones, en pies cuadrados',
     min_value=0,
     value=0,
     step=10
@@ -624,8 +624,7 @@ sale_condition = st.selectbox(
 
 
 
-if st.button('Mostrar datos y predecir'):
-    st.write('Caracteristicas seleccionadas: ')
+if st.button('REALIZAR PREDICCIÓN'):
 
     json_to_send = {
         'MSSubClass': ms_sub_class,
@@ -717,9 +716,13 @@ if st.button('Mostrar datos y predecir'):
         timeout=30
     )
 
-    response = response.json()
+    response_json = response.json()
 
+    response_int = response_json['prediction']
 
-    st.json(response)
+    st.metric(
+        'Precio estimado',
+        value=f'${response_int:.2f}'
+    )
 
     
