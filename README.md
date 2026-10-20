@@ -1,90 +1,136 @@
 # 🧪 Proyecto predicción de precios de casas
 
 ## ❓ Planteamiento del proyecto
-Dentro del mercado inmobiliario existen muchas caracaterísticas que rigen e influyen fuertemente en el precio final del hogar. Así mismo estas mismas propiedades pueden verse afectadas entre si, lo cual se traduce en la posibilidad de existir varias cosas a considerar además del los datos "duros" que estan representando cada característica. Ante tal complejidad de interpretabilidad de los datos, este proyecto propone 2 algoritmos de Machine Learning, los cuales comparten una lógica de liempieza, pero se separan en el punto del feature engineering, debido a que no funcionan de la misma manera.
+Dentro del mercado inmobiliario las características de una vivienda pueden llegar a ser muy diversas, por lo que estimar el valor muchas veces puede llegar a ser una tarea compleja. Este proyecto busca realizar un análisis de elementos que influyen (o no) en el precio de un hogar. Además de generar un algoritmo de Machine Learning que sea capaz de estimar de la forma más cercana el precio final.
 
-El proyecto ha sido desarrollado con la intención de además de ser lo suficientemente preciso como para considerarlo un buen modelo, de seguir una estructura de pasos limpia y estructurada, para el entendimiento general del proceso.
+## 🛠️ Technologies/Tools
+- Pandas
+- Scikit-learn
+- FastAPI
+- Docker
+- Matplotlib
+- Seaborn
+- Numpy
+- Pydantic
+- Streamlit
 
 ## ℹ️ Dataset
 Recurso: Kaggle
+
+Link: https://www.kaggle.com/competitions/house-prices-advanced-regression-techniques
+
 Registros: 1460
 
-## 🎯 Objetivo
-- Generar modelo LinearRegression y XGBRegressor con rmse bueno
+## 🎯 Objectives
+- Identificar características que aumentan el precio de la vivienda  y cuales lo disminuyen.
+- Entrenar modelos de Machine Learning que sean capaces de generar las predicciones lo más acertadas posible.
 
-## 🧹 Data cleaning
-En el primer intento de desarrollo para este dataset, se aplicaron medidas de tendencia central que utilizaban la información de todo el dataset, resultando en un leakage que luego complicó todo el desarrollo de los modelos de ML, por lo que se optó por reiniciar el proyecto utilizando mejores prácticas y medidas mas inteligentes, como por ejemplo la separación inmediata de los datos de entrenamiento y los de prueba. Luego de eso se han aplicado las siguientes acciones:
-- Identificar todas los features que su valor faltante (NaN) tiene como significado que la casa no cuenta con tal característica, mas no es una falta de información. Tales valores faltantes se han rellenado con el string "None".
-- Rellenar valores faltantes dentro del feature de LotFrontage con la mediana de los datos de entrenamiento y la mediana de las pruebas por separado.
-- Crear feature indicador de pertenencia de garage.
-- Rellenar feature de GarageYrBlt con ceros (indicando no existencia), luego de comprobrar que los otros features con respecto al garage no indiquen que si existe.
-- Completar con ceros en MasVnrArea cuando el valor de MasVnrType es "None".
-- Completar valores de MasVnrType que son "None" pero si tienen un valor en MasVnrArea con "Other" (esto debido a que no es lógico que el garage tenga una dimensión pero no exista).
-- Rellenar Electrical con la moda.
+## 🔎 EDA
+En primer lugar, se ha hecho una exploración de los datos, con el fin de comprender relaciones y proporciones, los hallazgos más importantes se muestran a continuación:
 
-## ✅ Preparación final para ML
-- Obtener dummies de los features categóricos.
-- Alinear los valores del test a los de entrenamiento, debido a que a obtención de dummies puede generar features diferentes.
+### 1. SalePrice distribution
+A modo general las viviendas cuestan entre ≈$100,000 a ≈$250,000. Existen casas con un precio bastante por encima de lo máximo normal (≈$340,000) con valores incluso hasta los ≈$750,000
 
-## 🤖 Machine Learning
-Dentro del trabajo con Machine Learning se ha aplicado un trabajo iterativo, para testear el funcionamiento inicial de los modelos y luego con feature engineering.
-Los modelos utilizados fueron LinearRegression y XGBRegressor, el primero debido a su simplicidad de uso, en segundo lugar se optó por XGBoost por su capacidad de detectar patrones mas complejos.
-
-#### Primera versión
-Los pasos realizados fueron los siguientes:
-- Instanciar modelos
-- Entrenar
-- Hacer predicciones
-- Comprobar su rendimiento con RMSE (root mean squared error) que nos indica cuantitativamente cuantas unidades se puede equivocar con respecto al valor real de la casa.
-- Visualizar los features mas importantes que afectan al modelo de XGBoost
-
-rmse LinearRegression: 65342.639165689994
-rmse XGBRegressor: 26142.080712904244
-
-#### Segunda versión
-- Separar por grupo de entrenamiento y test del dataset inicial.
-- Limpiar con misma lógica del data cleaning mediante funciones.
-- Mapear features que tienen variables categóricas ordinales con valores de 0 a 5.
-- Obtener dummies.
-- Alinear.
-- Instanciar modelos, entrenar, predecir y medir.
-
-Detalle en este paso:
-Debido al mapeo categórico ordinale el modelo de regresión lineal obtuvo mejoras considerables, no así el modelo de XGBoost, esto es debido a que XGBoost es mas potente mientras mas features tiene para clasificar debido a su naturaleza en base a árboles de decisión. Ante esta situación se ha tomado la decisión de luego de haber hecho el data cleaning en la versión 3, se separará el feature engineering para cada modelo por separado.
-
-rmse LinearRegression: 29452.101647099902
-rmse XGBRegressor: 27573.245003082244
-
-#### Tercera versión
-Modelo LinearRegression:
-- Separar entrenamiento de las pruebas.
-- Data cleaning mediante función.
-- Feature engineering de la segunda versión mediante función.
-- En este paso se probaron varias posibilidades de feature engineering, como lo son el mapeo categórico ordinal de LotShape, obtener feature de HasPool, entre otros. Los cuales algunos dieron con una mejor casi imperceptible. Hasta que se creó un feature multiplicando OverallQual y GrLivArea obteniendo un feature que considera la calidad general de la casa y el espacio habitable, así teniendo un producto de calidad y tamaño lo cual mejoró el modelo de LinearRegression.
-- Obtener dummies y alinear mediante función.
-- Modelar, entrenar, predecir y medir mediante función.
-
-rmse LinearRegression: 27232.44588330655
+![saleprice_general_distribution](outputs/figures/01_saleprice_general_destribution.png)
 
 
-Modelo XGBRegressor:
-- Separar entrenamiento de las pruebas.
-- Data cleaning mediante función.
-- Obtener dummies y alinear mediante función.
-- Modelar, entrenar, predecir y medir mediante función.
-- En este paso primero se optó por ver la mejor opción de hiperparámetros mediante GridSearchCV, lo cual no tuvo resultados que se esperaban, esto debido a que se utilizaron muchos parámetros con los que probar, obteniendo una complejización del modelo ineficaz. Finalmente se ha optado por configurar parámetros de manera manual.
-- Entrenar.
-- Predecir.
-- Medir rmse, obteniendo una buena mejora.
+### 2. LotArea
+Casi todas las casas tienen un área o superficie total de terreno por debajo de los 20,000. Además, si no consideramos los outliers, hay una ligera relacion entre LotArea y SalePrice, donde a medida que LotArea aumenta, SalePrice tiende relativamente a aumentar un poco.
 
-rmse XGBRegressor: 23797.66307854618
+![lot_area_distribution](outputs/figures/04_lotarea_dist.png)
 
-## Versión de python para el kernel
-- Python 3.13.9
+![saleprice_by_lot_area_relation_below2500](outputs/figures/04_04_saleprice_by_lotarea_below25000_regplot.png)
 
-## 🏆 Resultados Finales
-Luego de haber realizado todo este procedimiento, con detalle en la separación del flujo para los modelos de regresión, se ha llegado a un rmse considerado bueno en ambos, concluyendo con modelos efectivos y estables.
+
+### 3. Neighborhood
+Existen vecindarios que tienen una gran diferencia promedio de precio con respecto a otros. Por ejmplo, vivir en "NoRidge" al parecer es donde se tiende a tener precios más altos de vivienda, con un promedio de ≈$330,000. Y el top 3 de lugares más baratos donde vivir son "MeadoWV", "IDOTRR" y "BrkSide" con un promedio de ≈$100,000.
+
+![saleprice_mean_by_neighborhood](outputs/figures/06_saleprice_mean_by_neighborhood.png)
+
+
+### 4. OverallQual
+La calidad general de la casa es probablemente la característica más influyente en el precio de las viviendas, con una relación practicamente lineal, donde cada calidad aumenta la mediana del precio de forma relativamente proporcional. Aunque en las calidades de 8, 9 y 10 el aumento es un poco más notable.
+
+![saleprice_dist_by_overallqual](outputs/figures/07_saleprice_dist_by_overallqual.png)
+
+
+### 5. OverallCond
+Las condiciones generales tambíen llevan una relacion lineal en general dentro del aumento de precio, aunque mucho más suavizado. Cabe recalcar una anomalía en donde los hogares con un OverallCond de 5 pueden tener los precios más dispersos y con una mediana incluso más alta que una condición de 10. Además la condición 5 tiene varios más outliers que otras categorías.
+
+![saleprice_dist_by_overallcond](outputs/figures/08_saleprice_dist_by_overallcond.png)
+
+
+### 6. ExterQual
+La calidad del material del exterior usualmente si sube los precios de manera relativamente proporcional, aunque hay un cambio mas fuerte en la mediana con las calidades tipo "Ex"
+
+![saleprice_dist_by_exterqual](outputs/figures/10_saleprice_dist_by_exterqual.png)
+
+
+### 7. BsmtQual
+La calidad del sótano tiende a aumentar ligeramente en función de calidades mejores, pero la calidad "Ex" aumenta de forma más fuerte el precio de la casa.
+
+![saleprice_by_bsmtqual](outputs/figures/12_01_SalePrice_by_BsmtQual_with_NoBasement.png)
+
+
+### 8. 1stFlrSF
+La mayoría de las casas tiene al rededor de unos 1000 pies cuadrados en la primera planta, además en conforme los pies cuadrados aumentan, los precios tienden a aumentar de forma más significativa. (En el segundo gráfico se ha omitido 1 outlier)
+
+[1sFlrSF_dist](outputs/figures/15_01_saleprice_by_1stFlrSF.png)
+
+[saleprice_by_1sFlrSF_regplot](outputs/figures/15_04_saleprice_by_1stFlrSF_no_outlier_regplot.png)
+
+
+### 9. FullBath
+Tener 3 baños por lo visto tiende a aumentar el precio de la vivienda. Cabe señalar que las viviendas con solo 1 baño terminado pueden costar incluso menos que las que no tienen ninguno, esto tal vez se pueda explicar debio a que las casas con 0 baños terminados es probable que sean más nuevas.
+
+![saleprice_by_fullbath](outputs/figures/17_01_saleprice_by_fullbath.png)
+
+
+### 10. GrLivArea
+La mayoría del area habitable (por encima del nivel del suelo), tiende a estar entre los 900 y 2000 pies cuadrados, además existe una clara relacion positiva entre GrLivArea y SalePrice.
+
+![grlivarea_dist](outputs/figures/18_grlivarea_dist.png)
+
+![saleprice_by_grlivarea_regplot](outputs/figures/18_02_saleprice_by_grlivarea_regplot.png)
+
+
+### 11. KitchenQual
+La calidad de la cocina también es un buen indicador del precio de la vivienda, aunque en este caso a pesar de que la mediana de la calidad "Ex" es notablemente más alta que el resto, tiene tanto valores bajos y altos de forma normal.
+
+![saleprice_by_kitchenqual](outputs/figures/19_saleprice_by_kitchenqual.png)
+
+
+### 12. TotRmsAbvGrd
+La mayoría de los hogares tiene entre 5 a 9 habitaciones, considerando salas de estar, comedores, habitaciones, etc. Y el precio promedio aumenta en funcion del aumento de habitaciones, pero con una mayor variabilidad en los precios también.
+
+![total_rooms_above_grade_dist](outputs/figures/20_TotRmsAbvGrd_dist.png)
+
+![saleprice_by_totrmsabvgrd](outputs/figures/20_01_SalePrice_by_TotRmsAbvGrd.png)
+
+
+### 13. Garage
+En su mayoría, las características referentes al garage como su calidad, su tipo y su condición no influyen de manera muy clara en el precio de la casa. El area (GarageArea) si tiene una relación un poco mas evidente, pero la cantidad de autos que caben en el garage es el mejor indicador en relación al precio. Cabe señalar que curiosamente los garages con la capacidad máxima del dataset (4) tienen valores por debajo de la categoría de 3.
+
+![saleprice_by_garage_area](outputs/figures/22_01_SalePrice_by_GarageArea_regplot.png)
+
+![saleprice_dist_by_garage_cars](outputs/figures/31_SalePrice_ist_by_GarageCars.png)
+
+
+### 14. Correlations
+
+#### 14.1 With SalePrice
+Aquí podemos ver la correlación de Pearson con SalePrice, podemos ver como la característica más fuertemente relacionada con el precio, es "OverallQual" seguido de "GrLivArea" y luego "GarageCars", por lo que podemos determinar que en cuanto a variables cuantitativas se refiere, la calidad general de la casa y la capacidad tanto como de espacio para vivir y tener autos es lo que más afecta en el precio.
+
+![pearson_correlation_with_saleprice](outputs/figures/28_correlations_with_saleprice.png)
+
+#### 14.2 Between features
+En esta visualización se expone a modo general cada relacion de cada feature con el resto. Los puntos en un tono verde más oscuro muestran una mayor correlación, los cercanos al blanco muestran una correlación negativa. Podemos ver correlaciones fuertes esperables como GarageCars/GarageArea o también GrLivArea/TotRmsAbvGrd
+
+![correlations_between_features](outputs/figures/29_correlations_between_features.png)
+
+
+
+
 
 ## 👤 Autor
 Carlos Rojas Villegas
-
