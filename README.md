@@ -148,42 +148,47 @@ Features que sus nulos son falta de información:
 - LotFrontage
 - Electrical
 
-### PoolQC: NaN --> "NoPool"
+PoolQC: NaN --> "NoPool"
 
-### MiscFeature: NaN --> "NoMisceFeat"
+MiscFeature: NaN --> "NoMisceFeat"
 
-### Alley: NaN --> "NoAlleyAccess"
+Alley: NaN --> "NoAlleyAccess"
 
-### Fence: NaN --> "NoFence"
+Fence: NaN --> "NoFence"
 
-### MasVnrType: NaN --> "NoMasVnr"
+MasVnrType: NaN --> "NoMasVnr"
 
-### MasVnrArea: NaN --> 0
+MasVnrArea: NaN --> 0
 
-### FireplaceQu: NaN --> "NoFireplace"
+FireplaceQu: NaN --> "NoFireplace"
 
-### GarageType: NaN --> "NoGarage"
+GarageType: NaN --> "NoGarage"
 
-### GarageYrBlt: NaN --> 0
+GarageYrBlt: NaN --> 0
 
-### GarageFinish: NaN --> "NoGarage"
+GarageFinish: NaN --> "NoGarage"
 
-### GarageQual: NaN --> "NoGarage"
+GarageQual: NaN --> "NoGarage"
 
-### GarageCond: NaN --> "NoGarage"
+GarageCond: NaN --> "NoGarage"
 
-### BsmtExposure: NaN --> "NoBasement"
+BsmtExposure: NaN --> "NoBasement"
 
-### BsmtFinType2: NaN --> "NoBasement"
+BsmtFinType2: NaN --> "NoBasement"
 
-### BsmtQual: NaN --> "NoBasement"
+BsmtQual: NaN --> "NoBasement"
 
-### BsmtCond
-NaN --> "NoBasement"
+BsmtCond: NaN --> "NoBasement"
 
-### BsmtFinType1
-NaN --> "NoBasement"
+BsmtFinType1: NaN --> "NoBasement"
 
+
+## ⚙️ Preprocessing
+Para preprocesar la información se identifica que hay una lista de features que siguen la forma de sus categorías de la siguiente manera:
+
+***"Po" < "Fa" < "TA" < "Gd" < "Ex"***
+
+Los features que tienen esta forma serán reemplazados con un orden de 1 a 5, exceptuando cuando no tenga directamente el feature, que se rellena con un 0.
 
 
 ## 👤 Autor
