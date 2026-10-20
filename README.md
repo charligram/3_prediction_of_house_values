@@ -75,9 +75,9 @@ La calidad del sótano tiende a aumentar ligeramente en función de calidades me
 ### 8. 1stFlrSF
 La mayoría de las casas tiene al rededor de unos 1000 pies cuadrados en la primera planta, además en conforme los pies cuadrados aumentan, los precios tienden a aumentar de forma más significativa. (En el segundo gráfico se ha omitido 1 outlier)
 
-[1sFlrSF_dist](outputs/figures/15_01_saleprice_by_1stFlrSF.png)
+![1sFlrSF_dist](outputs/figures/15_01_saleprice_by_1stFlrSF.png)
 
-[saleprice_by_1sFlrSF_regplot](outputs/figures/15_04_saleprice_by_1stFlrSF_no_outlier_regplot.png)
+![saleprice_by_1sFlrSF_regplot](outputs/figures/15_04_saleprice_by_1stFlrSF_no_outlier_regplot.png)
 
 
 ### 9. FullBath
@@ -148,50 +148,35 @@ Features que sus nulos son falta de información:
 - LotFrontage
 - Electrical
 
-### PoolQC
-NaN --> "NoPool"
+### PoolQC: NaN --> "NoPool"
 
-### MiscFeature
-NaN --> "NoMisceFeat"
+### MiscFeature: NaN --> "NoMisceFeat"
 
-### Alley
-NaN --> "NoAlleyAccess"
+### Alley: NaN --> "NoAlleyAccess"
 
-### Fence
-NaN --> "NoFence"
+### Fence: NaN --> "NoFence"
 
-### MasVnrType
-NaN --> "NoMasVnr"
+### MasVnrType: NaN --> "NoMasVnr"
 
-### MasVnrArea
-NaN --> 0
+### MasVnrArea: NaN --> 0
 
-### FireplaceQu
-NaN --> "NoFireplace"
+### FireplaceQu: NaN --> "NoFireplace"
 
-### GarageType
-NaN --> "NoGarage"
+### GarageType: NaN --> "NoGarage"
 
-### GarageYrBlt
-NaN --> 0
+### GarageYrBlt: NaN --> 0
 
-### GarageFinish
-NaN --> "NoGarage"
+### GarageFinish: NaN --> "NoGarage"
 
-### GarageQual
-NaN --> "NoGarage"
+### GarageQual: NaN --> "NoGarage"
 
-### GarageCond
-NaN --> "NoGarage"
+### GarageCond: NaN --> "NoGarage"
 
-### BsmtExposure
-NaN --> "NoBasement"
+### BsmtExposure: NaN --> "NoBasement"
 
-### BsmtFinType2
-NaN --> "NoBasement"
+### BsmtFinType2: NaN --> "NoBasement"
 
-### BsmtQual
-NaN --> "NoBasement"
+### BsmtQual: NaN --> "NoBasement"
 
 ### BsmtCond
 NaN --> "NoBasement"
