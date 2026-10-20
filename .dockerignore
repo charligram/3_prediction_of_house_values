@@ -1,0 +1,12 @@
+.venv/
+venv
+README.md
+notebooks/
+data/
+outputs/
+src/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.git
+.vscode/

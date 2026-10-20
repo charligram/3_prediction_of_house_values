@@ -1,5 +1,3 @@
-import pandas as pd
-
 def preprocess(df):
 
     # Diccionario de orden para jerarquías en features categoricas
