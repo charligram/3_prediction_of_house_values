@@ -1,6 +1,6 @@
 import streamlit as st
 import requests
-import json
+import os
 
 st.title('House Prices Predictor')
 
@@ -708,18 +708,32 @@ if st.button('REALIZAR PREDICCIÓN'):
         'SaleCondition': sale_condition
     }
 
+    # Obtener variable de entorno, si se ejecuta en Docker obtiene API_URL
+    # de no ejecutarse en Docker obtiene la dirección 127...
+    api_url = os.getenv(
+        'API_URL',
+        'http://127.0.0.1:8000/predict'
+    )
 
-
+    # Enviar una request con metodo post a la url, esto podría enviarse
+    # al servicio de "api" dentro de Docker o a la dirección del propio PC
     response = requests.post(
-        'http://127.0.0.1:8000/predict',
+        api_url,
         json=json_to_send,
         timeout=30
     )
 
+    # Convertimos a json la respuesta
     response_json = response.json()
 
+    # Obtenemos el valor donde la clave es 'prediction', ya que /predict dentro
+    # de fastapi devuelve algo como:
+    #{
+    #   "prediction": prediction
+    #}
     response_int = response_json['prediction']
 
+    # Crear metrica y ponerle el precio (metric es para que se vea mejor, podria ser write, title, etc)
     st.metric(
         'Precio estimado',
         value=f'${response_int:.2f}'
