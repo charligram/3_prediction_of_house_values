@@ -129,6 +129,75 @@ En esta visualización se expone a modo general cada relacion de cada feature co
 ![correlations_between_features](outputs/figures/29_correlations_between_features.png)
 
 
+## 🧹 Data cleaning
+Para comenzar con el trabajo de la limpieza y transformaciones de los datos, primero se decide identificar los features que sus NaN's no son nulos reales, solo significan que no contienen el feature y también identificar los nulos reales, los cuales se dejarán para el modelado. Estos features son los siguientes:
+
+Features que sus nulos significan auscencia:
+
+- PoolQC
+- MiscFeature
+- Alley
+- Fence
+- MasVnrType/MasVnrArea
+- FireplaceQu
+- GarageType/GarageYrBlt/GarageFinish/GarageQual/GarageCond
+- BsmtExposure/BsmtFinType2/BsmtQual/BsmtCond/BsmtFinType1
+
+Features que sus nulos son falta de información:
+
+- LotFrontage
+- Electrical
+
+### PoolQC
+NaN --> "NoPool"
+
+### MiscFeature
+NaN --> "NoMisceFeat"
+
+### Alley
+NaN --> "NoAlleyAccess"
+
+### Fence
+NaN --> "NoFence"
+
+### MasVnrType
+NaN --> "NoMasVnr"
+
+### MasVnrArea
+NaN --> 0
+
+### FireplaceQu
+NaN --> "NoFireplace"
+
+### GarageType
+NaN --> "NoGarage"
+
+### GarageYrBlt
+NaN --> 0
+
+### GarageFinish
+NaN --> "NoGarage"
+
+### GarageQual
+NaN --> "NoGarage"
+
+### GarageCond
+NaN --> "NoGarage"
+
+### BsmtExposure
+NaN --> "NoBasement"
+
+### BsmtFinType2
+NaN --> "NoBasement"
+
+### BsmtQual
+NaN --> "NoBasement"
+
+### BsmtCond
+NaN --> "NoBasement"
+
+### BsmtFinType1
+NaN --> "NoBasement"
 
 
 
