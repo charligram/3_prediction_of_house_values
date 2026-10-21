@@ -184,11 +184,152 @@ BsmtFinType1: NaN --> "NoBasement"
 
 
 ## ⚙️ Preprocessing
+
+1. Hierarchical features
 Para preprocesar la información se identifica que hay una lista de features que siguen la forma de sus categorías de la siguiente manera:
 
 ***"Po" < "Fa" < "TA" < "Gd" < "Ex"***
 
-Los features que tienen esta forma serán reemplazados con un orden de 1 a 5, exceptuando cuando no tenga directamente el feature, que se rellena con un 0.
+Los features que tienen esta forma serán reemplazados con un orden de 1 a 5, donde 5 es la mejor categoría y 1 la peor, exceptuando cuando no tenga directamente el feature, que se rellena con un 0. Estos features son:
+
+- LotShape
+- ExterQual
+- ExterCond
+- BsmtQual
+- BsmtCond
+- HeatingQC
+- KitchenQual
+- FireplaceQu
+- GarageQual
+- GarageCond
+- PoolQC
+
+2. LotShape
+Luego de eso, la siguiente transformación se aplica LotShape, el cual tiene una forma de:
+
+***"IR3" < "IR2" < "IR1" < "Reg"***
+
+Y son reemplazados con números del 1 al 4.
+
+3. Id
+El feature "Id" proporciona poca información de predicción, asi que lo eliminamos.
+
+4. MSSubClass
+Este feature es numérico pero representa características categoricas, por lo que se cambie su tipo de dato a str.
+
+## 🤖 Machine Learning
+Modelos probados:
+
+- LinearRegression
+- RandomForestRegressor
+- KNeighborsRegressor
+- XGBRegressor
+
+### First models
+A modo general, el proceso de ML se llevo acabo probando el desempeño de los 4 modelos dentro de los datos de entrenamiento con un "Pipeline" y utilizando "cross validate" para evaluar métricas.
+
+El Pipeline se compone inicialmente de 3 partes:
+
+1. Preprocesador
+Esta primera etapa consta de 2 partes. La primera se encarga de imputar los datos numéricos faltantes con la mediana del mismo feature imputado. La segunda parte se aplica dentro de los features categóricos, primero imputa los datos faltantes con el valor más frecuente en el feature y luego aplica OneHotEnconding a todos los features categóricos.
+
+2. StandardScaler
+Aquí el pipeline transforma todos los datos (ya que en esta parte todos son numéricos) y los deja con valores con media 0 y desviación estándar 1. Detalle: este proceso está mas que nada dedicado a los modelos sensibles al escalado como LinearRegression o KNeighborsRegressor
+
+3. Model
+Modelo de Machine Learning
+
+El cross validate se realiza con KFold con el fin de partir los datos de entrenamiento en 5 partes y mezclando los registros, para evitar entrenar y probar con conjuntos agrupados. El scoring a medir se basa en:
+
+- MAE: Para medir el error absoluto promedio, con esto sabemos en promedio cuanto se equivoca el modelo.
+
+- RMSE: Mide error la raíz del error cuadrático medio, de esta forma podemos ver que tan grandes son los errores.
+
+- R2: Mide la variabilidad que el modelo logra explicar en comparación de predecir siempre el promedio de los precios de las casas.
+
+Como los modelos se prueban cada uno 5 veces, se miden las métricas con el promedio de cada prueba y su desviación estandar.
+
+#### Plots of first models
+Podemos ver en el siguiente gráfico que los modelos basados en arboles logran unas mejores métricas:
+
+![metrics_in_train_5folds](outputs/figures_modeling/01_metrics_in_train_with_5_folds.png)
+
+Ahora veremos el resultado que entregan en test, donde nuevamente los modelos basados en árboles logran mejores estadísticas:
+
+![metrics_in_test](outputs/figures_modeling/02_metrics_in_test.png)
+
+En los siguientes 4 gráficos podemos ver como se comportan los 4 modelos cuando intentan predecir test. Para interpretar los gráficos se debe saber que la linea en diagonal representan los datos reales del test (es decir los datos correctos) y los puntos verdes representan la predicción que hace el modelo. En resumen, mientras más pegada a la linea diagonal los puntos, mejor el modelo.
+
+![compare_predictions_in_test](outputs/figures_modeling/03_compare_prediction_vs_real_in_test.png)
+
+Los insight's que se obtienen de cada modelo son los siguientes:
+
+- LinearRegression: A modo general predice bien los precios, aunque sus predicciones fallan un poco más fuerte que los otros modelos.
+
+- RandomForestRegressor: Este modelo predice bastante bien, con sus predicciones bastante cercanas a los datos reales, aunque tiende a subestimar el precio de casas más caras.
+
+- XGBRegressor: Este modelo también predice bien a modo general, con predicciones bastante cercanas a la realidad y subestima un poco menos los precios de casas caras.
+
+- KNN: Si bien en los precios desde el inicio hasta los ≈350,000 son bastante fiables, de ahí en adelante el modelo subestima el precio más que el resto.
+
+También podemos ver los resultados con la totalidad de los datos:
+
+![compare_predictions_in_full_data](outputs/figures_modeling/04_compare_prediction_vs_real_in_full_data.png)
+
+
+### Second models
+Luego de la primera iteración se ha dedicido seguir con los modelos basados en arboles, teniendo asi una cierta hipotesis de interacción entre features. Los modelos elegidos para continuar son:
+
+- RandomForestRegressor
+- XGBRegressor
+
+Ahora, para elegir finalmente el modelo a utilizar, se opta por recurrir a GridSearchCV con el fin de probar varias combinaciones de hiperparámetros y obtener el mejor modelo posible para los datos. Luego de eso los modelos ya entrenados, con los mejores hiperparámetros encontrados se evaluaron en test, donde se obtuvieron estas métricas:
+
+![metrics_in_test_gridsearch_models](outputs/figures_modeling/05_metrics_in_test_gridsearch_models.png)
+
+También podemos ver el resultado de los modelos comparando sus predicciones en el dataset completo:
+
+![compare_predictions_with_gridsearch_in_test](outputs/figures_modeling/07_compare_prediction_vs_real_in_full_data_gridsearch_models.png)
+
+Con esto finalmente se decide guardar el modelo de XGBRegressor para luego usarse en la aplicación. Esto debido a su aparente mejor ajuste a los datos y generalización.
+
+## 🏃 Run project
+### ❇️ App
+El proyecto cuenta con una app montable a través de Docker, el proceso es el siguiente:
+
+1. Con "Docker Desktop" abierto, abrir una Powershell e ingresar a la carpeta donde se tenga el proyecto.
+
+2. Ejectuar "Docker compose up --build"
+
+3. Ingresar con un navegador a la ruta http://localhost:8501
+
+4. Ingresar información de la vivienda en los campos y clickear botón de "REALIZAR PREDICCIÓN". El precio estimado se mostrará debajo del botón.
+
+### 📓 Notebooks
+Para ejecutar los notebooks, es necesario:
+
+1. Abrir terminal
+
+2. Crear entorno virtual
+
+3. Instalar dependencias con "pip install -r requirements.txt"
+
+4. Crear la siguiente ruta de carpetas
+
+```
+project
+├──data/            <-- Crear esta carpeta y las de su interior
+│  ├──clean/
+│  ├──processed/
+│  └──raw/
+│     └──train.csv  <-- Descargar dataset aquí
+├──app/
+├──frontend/
+├──notebooks/
+...
+```
+
+5. En este punto ya se pueden ejecutar todos los notebooks en orden
 
 
 ## 👤 Autor
