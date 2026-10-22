@@ -39,7 +39,7 @@ lot_area = st.number_input(
 )
 
 street = st.selectbox(
-    'Tipo de acceso vial a la propieda',
+    'Tipo de acceso vial a la propiedad',
     options=['Grvl', 'Pave']
 )
 
