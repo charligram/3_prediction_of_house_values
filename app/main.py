@@ -4,15 +4,18 @@ import pandas as pd
 from app.services.predict import preprocess, model_predict
 import joblib
 
+# Cargar modelo
 xgboost_model = joblib.load('model/xgboost_model.pkl')
 
+# Crear app de FastAPI
 app = FastAPI()
 
+# Ruta raíz de la API
 @app.get("/")
 def root():
     return {'message': 'API WORKS!!!'}
 
-
+# Endpoint para hacer predicciones
 @app.post("/predict")
 def predict(data: PredictionInput):
 
