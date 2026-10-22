@@ -7,9 +7,9 @@ def simple_report(df: pd.DataFrame, feature: str, show_categories: bool = False)
     Opcionalmente se pueden mostrar las categorías posiibles.
 
     Args:
-        df (DataFrame): DataFrame que contiene la información
-        feature (str): Nombre de la columna a investigar
-        show_categories (bool): Por defecto False. Con True la función muestra las categorías dentro del feature
+        df (DataFrame): DataFrame que contiene la información.
+        feature (str): Nombre de la columna a investigar.
+        show_categories (bool): Por defecto False. Con True la función muestra las categorías dentro del feature.
 
     Returns:
         Imprime el siguiente formato:
