@@ -5,6 +5,20 @@ import pandas as pd
 PROJECT_COLORS = ["#2DD61D", "#3410FF"]
 
 def bar_plot_project(x: pd.Series, height: pd.Series, title: str, x_label: str, y_label: str):
+    """
+    Crea un gráfico de barras con los colores asociados al proyecto.
+
+    Args:
+        x (pd.Series): Serie que contiene los valores que irán en el eje X.
+        height (pd.Series): Serie con los valores de la altura que tomaran las barras en el eje Y.
+        title (str): Título del gráfico.
+        x_label (str): Etiqueta del eje X.
+        y_label (str): Etiqueta del eje Y.
+    
+    Returns:
+        fig (plt.figure): Figure del gráfico.
+        ax (plt.axes): Axes del gráfico.
+    """
     fig, ax = plt.subplots(figsize=(15, 5))
 
     ax.bar(
@@ -25,6 +39,19 @@ def bar_plot_project(x: pd.Series, height: pd.Series, title: str, x_label: str, 
 
 
 def hist_plot_project(x: pd.Series, title: str, x_label: str, y_label: str = 'Count'):
+    """
+    Crea un histograma con los colores asociados al proyecto.
+
+    Args:
+        x (pd.Series): Serie que contiene los valores que irán en el eje X.
+        title (str): Título del gráfico.
+        x_label (str): Etiqueta del eje X.
+        y_label (str): Etiqueta del eje Y. Por defecto "Count".
+    
+    Returns:
+        fig (plt.figure): Figure del gráfico.
+        ax (plt.axes): Axes del gráfico.
+    """
     fig, ax = plt.subplots(figsize=(15, 5))
 
     ax.hist(
@@ -48,6 +75,20 @@ def hist_plot_project(x: pd.Series, title: str, x_label: str, y_label: str = 'Co
 
 
 def scatter_plot_project(x: pd.Series, y: pd.Series, title: str, x_label: str, y_label: str):
+    """
+    Crea un gráfico tipo scatter con los colores asociados al proyecto.
+
+    Args:
+        x (pd.Series): Serie que contiene los valores que irán en el eje X.
+        y (pd.Series): Serie con los valores de la altura que tomaran los puntos en el eje Y.
+        title (str): Título del gráfico.
+        x_label (str): Etiqueta del eje X.
+        y_label (str): Etiqueta del eje Y.
+    
+    Returns:
+        fig (plt.figure): Figure del gráfico.
+        ax (plt.axes): Axes del gráfico.
+    """
     fig, ax = plt.subplots(figsize=(15, 5))
 
     ax.scatter(
@@ -65,6 +106,18 @@ def scatter_plot_project(x: pd.Series, y: pd.Series, title: str, x_label: str, y
     return fig, ax
 
 def reg_plot_project(df: pd.DataFrame, x_name: str, y_name: str, title: str):
+    """
+    Crea un gráfico de regresión con los colores asociados al proyecto.
+
+    Args:
+        x_name (str): Nombre del feature que contiene los valores que irán en el eje X.
+        y_name (str): Nombre del feature con los valores de la altura que tomaran los puntos en el eje Y.
+        title (str): Título del gráfico.
+    
+    Returns:
+        fig (plt.figure): Figure del gráfico.
+        ax (plt.axes): Axes del gráfico.
+    """
     fig, ax = plt.subplots(figsize=(15, 5))
 
     sns.regplot(
@@ -87,6 +140,18 @@ def reg_plot_project(df: pd.DataFrame, x_name: str, y_name: str, title: str):
     return fig, ax
 
 def box_plot_project(df: pd.DataFrame, x_name: str, y_name: str, title: str):
+    """
+    Crea un gráfico de cajas con los colores asociados al proyecto.
+
+    Args:
+        x_name (str): Nombre del feature que contiene los valores de las categorías que irán en el eje X.
+        y_name (str): Nombre del feature con los valores para crear las cajas en el eje Y.
+        title (str): Título del gráfico.
+    
+    Returns:
+        fig (plt.figure): Figure del gráfico.
+        ax (plt.axes): Axes del gráfico.
+    """
     fig, ax = plt.subplots(figsize=(15, 5))
 
     sns.boxplot(
@@ -116,4 +181,3 @@ def box_plot_project(df: pd.DataFrame, x_name: str, y_name: str, title: str):
     ax.set_title(title)
 
     return fig, ax
-
