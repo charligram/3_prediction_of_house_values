@@ -701,9 +701,10 @@ sale_condition = st.selectbox(
 
 
 
-
+# Botón para realizar predicción, al clickearlo se convierte en verdadero
 if st.button('REALIZAR PREDICCIÓN'):
 
+    # Armar el json que se va a mandar a la API, en verdad es un diccionario común de Python
     json_to_send = {
         'MSSubClass': ms_sub_class,
         'MSZoning': ms_zoning,
